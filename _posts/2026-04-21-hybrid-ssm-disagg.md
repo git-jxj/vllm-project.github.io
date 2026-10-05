@@ -12,7 +12,7 @@ tags:
 ## Introduction
 
 Hybrid architectures that interleave Mamba-style SSM layers with standard full-attention (FA) layers — such as [NVIDIA Nemotron-H](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-FP8) — are gaining traction as a way to combine the linear-time efficiency of state-space models with the expressiveness of attention.
-vLLM already supports disaggregated prefill/decode (P/D) for standard transformer models through its [NIXL-based KV connector](https://blog.vllm.ai/2025/01/27/v0-disagg-prefill.html): a prefill instance computes KV cache blocks and a decode instance pulls them over RDMA, eliminating redundant recomputation.
+vLLM already supports disaggregated prefill/decode (P/D) for standard transformer models through its [NIXL-based KV connector](https://docs.vllm.ai/en/latest/features/nixl_connector_usage/): a prefill instance computes KV cache blocks and a decode instance pulls them over RDMA, eliminating redundant recomputation.
 But extending this to hybrid models is not straightforward. FA and SSM layers store fundamentally different state, in different layouts and different sizes, yet the block manager and NIXL connector were designed around a single, uniform KV cache format.
 
 In this post we describe how we extended the NIXL connector to support hybrid SSM-FA models in disaggregated mode. The key ideas are:
